@@ -27,7 +27,14 @@ namespace MusicStore.Api.Controllers
 			var response = new BaseResponseGeneric<IEnumerable<GenreResponseDto>>();
 			try
 			{
-				response.Data = await _genreRespository.GetAsync();
+				// Mapping
+				var genreDb = await _genreRespository.GetAsync();
+				var genresDto = genreDb.Select(x => new GenreResponseDto
+				{
+					Id = x.Id,
+					Name = x.Name
+				});
+				response.Data = genresDto;
 				response.Success = true;
 				_logger.LogInformation("Obteniendo todos los géneros musicales.");
 
@@ -47,11 +54,25 @@ namespace MusicStore.Api.Controllers
 			var response = new BaseResponseGeneric<GenreResponseDto>();
 			try
 			{
-				response.Data = await _genreRespository.GetAsync(id);
+				var genreDb = await _genreRespository.GetAsync(id);
+				if (genreDb is null)
+				{
+					response.ErrorMessage = "El género musical no existe.";
+					_logger.LogWarning(response.ErrorMessage);
+					return NotFound(response);
+				}
+				// Mapping
+				var genreDto = new GenreResponseDto
+				{
+					Id = genreDb.Id,
+					Name = genreDb.Name,
+					Status = genreDb.Status
+				};
+				response.Data = genreDto;
 				response.Success = true;
 				_logger.LogInformation($"Obteniendo el género musical con id {id}.");
 
-				return response.Data is null ? NotFound(response) : Ok(response);
+				return Ok(response);
 			}
 			catch (Exception ex)
 			{
@@ -67,7 +88,13 @@ namespace MusicStore.Api.Controllers
 			var response = new BaseResponseGeneric<int>();
 			try
 			{
-				var genreId = await _genreRespository.AddAsync(genreRequestDto);
+				var genreDb = new Genre()
+				{
+					Name = genreRequestDto.Name,
+					Status = genreRequestDto.Status
+				};
+
+				var genreId = await _genreRespository.AddAsync(genreDb);
 				response.Data = genreId;
 				response.Success = true;
 				_logger.LogInformation($"Se ha creado el género musical con id {genreId}.");
@@ -87,9 +114,21 @@ namespace MusicStore.Api.Controllers
 			var response = new BaseResponse();
 			try
 			{
-				await _genreRespository.UpdateAsync(id, genreRequestDto);
+				var genreDb = await _genreRespository.GetAsync(id);
+				if (genreDb is null)
+				{
+					response.ErrorMessage = $"El género musica con id {id} no existe.";
+					_logger.LogWarning(response.ErrorMessage);
+					return NotFound(response);
+				}
+
+				genreDb.Name = genreRequestDto.Name;
+				genreDb.Status = genreRequestDto.Status;
+
+				await _genreRespository.UpdateAsync();
+
 				response.Success = true;
-				_logger.LogInformation($"Se ha actualizado el género musical con id {id}.");
+				_logger.LogInformation($"Se ha actualizado el género musical con id {id} actualizado.");
 				return Ok(response);
 			}
 			catch (Exception ex)
@@ -106,6 +145,14 @@ namespace MusicStore.Api.Controllers
 			var response = new BaseResponse();
 			try
 			{
+				var genreDb = await _genreRespository.GetAsync(id);
+				if (genreDb is null)
+				{
+					response.ErrorMessage = $"El género musica con id {id} no existe.";
+					_logger.LogWarning(response.ErrorMessage);
+					return NotFound(response);
+				}
+
 				await _genreRespository.DeleteAsync(id);
 				response.Success = true;
 				_logger.LogInformation($"Se ha eliminado el género musical con id {id}.");

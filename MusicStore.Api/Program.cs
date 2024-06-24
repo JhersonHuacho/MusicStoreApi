@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Registering services
 builder.Services.AddTransient<IGenreRespository,GenreRespository>();
+builder.Services.AddTransient<IConcertRepository,ConcertRepository>();
 
 var app = builder.Build();
 
