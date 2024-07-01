@@ -29,6 +29,7 @@ namespace MusicStore.Repositories
 			return await _context.Set<Concert>()
 				.Include(x => x.Genre)
 				.Where(x => x.Title.Contains(title ?? string.Empty))
+				.IgnoreQueryFilters()
 				.AsNoTracking()
 				.Select(x => new ConcertInfo
 				{
@@ -39,14 +40,54 @@ namespace MusicStore.Repositories
 					UnitPrice = x.UnitPrice,
 					GenreId = x.GenreId,
 					Genre = x.Genre.Name,
-					DataEvent = x.DataEvent.ToShortDateString(),
-					TimeEvent = x.DataEvent.ToShortTimeString(),
+					DateEvent = x.DateEvent.ToShortDateString(),
+					TimeEvent = x.DateEvent.ToShortTimeString(),
 					ImageUrl = x.ImageUrl,
 					TicketsQuantity = x.TicketsQuantity,
 					Finalized = x.Finalized,
 					Status = x.Status ? "Activo" : "Inactivo"
 				})				
 				.ToListAsync();
+		}
+		public async Task<ICollection<ConcertInfo>> GetLazingAsync(string? title)
+		{
+			// Lazy loading approach es  	
+			return await _context.Set<Concert>()				
+				.Where(x => x.Title.Contains(title ?? string.Empty))
+				.AsNoTracking()
+				.Select(x => new ConcertInfo
+				{
+					Id = x.Id,
+					Title = x.Title,
+					Description = x.Description,
+					Place = x.Place,
+					UnitPrice = x.UnitPrice,
+					GenreId = x.GenreId,
+					Genre = x.Genre.Name,
+					DateEvent = x.DateEvent.ToShortDateString(),
+					TimeEvent = x.DateEvent.ToShortTimeString(),
+					ImageUrl = x.ImageUrl,
+					TicketsQuantity = x.TicketsQuantity,
+					Finalized = x.Finalized,
+					Status = x.Status ? "Activo" : "Inactivo"
+				})
+				.ToListAsync();
+		}
+
+		public async Task<ICollection<ConcertInfo>> GetWithStoredAsync(string? title)
+		{			
+			var query = _context.Set<ConcertInfo>().FromSqlRaw("dbo.usp_ListConcerts {0}", title ?? string.Empty);
+			return await query.ToListAsync();
+		}
+
+		public async Task FinalizedAsync(int id)
+		{
+			var entity = await GetAsync(id);
+			if (entity is not null)
+			{
+				entity.Finalized = true;
+				await UpdateAsync();
+			}
 		}
 	}
 }

@@ -7,7 +7,7 @@
 		public string Place { get; set; } = default!;
 		public double UnitPrice { get; set; }
 		public int GenreId { get; set; }
-		public DateTime DataEvent { get; set; }
+		public DateTime DateEvent { get; set; }
 		public string? ImageUrl { get; set; }
 		public int TicketsQuantity { get; set; }
 		public bool Finalized { get; set; }		
@@ -15,6 +15,6 @@
 		// quiere decir que hay una relación entre Concert y Genre de uno a muchos (1:N) y que Genre es la entidad principal
 		// y Concert es la entidad secundaria 
 		// 1 Genre puede tener muchos Concert
-		public Genre Genre { get; set; } = default!;
+		public virtual Genre Genre { get; set; } = default!;
     }
 }

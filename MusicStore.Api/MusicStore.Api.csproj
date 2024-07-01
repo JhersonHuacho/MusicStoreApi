@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -24,9 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MusicStore.Dto\MusicStore.Dto.csproj" />
-    <ProjectReference Include="..\MusicStore.Entities\MusicStore.Entities.csproj" />
-    <ProjectReference Include="..\MusicStore.Persistence\MusicStore.Persistence.csproj" />
-    <ProjectReference Include="..\MusicStore.Repositories\MusicStore.Repositories.csproj" />
+    <ProjectReference Include="..\MusicStore.Services\MusicStore.Services.csproj" />
   </ItemGroup>
 
 </Project>

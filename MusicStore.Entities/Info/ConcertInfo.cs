@@ -9,7 +9,7 @@
 		public double UnitPrice { get; set; }
 		public int GenreId { get; set; }
 		public string Genre { get; set; } = default!;
-		public string DataEvent { get; set; } = default!;
+		public string DateEvent { get; set; } = default!;
 		public string TimeEvent { get; set; } = default!;
 		public string? ImageUrl { get; set; }
 		public int TicketsQuantity { get; set; }

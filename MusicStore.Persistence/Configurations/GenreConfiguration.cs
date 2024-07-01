@@ -10,6 +10,7 @@ namespace MusicStore.Persistence.Configurations
 		{
 			builder.Property(x => x.Name).HasMaxLength(100);
 			builder.ToTable("Genre", "Musicales");
+			builder.HasQueryFilter(x => x.Status);
 		}
 	}	
 }
