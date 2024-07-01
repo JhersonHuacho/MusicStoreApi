@@ -22,7 +22,7 @@ namespace MusicStore.Api.Controllers
 
 		[HttpGet]
 		//public async Task<ActionResult<List<Genre>> Get()
-		public async Task<IActionResult> Get()
+		public async Task<IActionResult> Get(PaginationDto paginationDto)
 		{
 			var response = await _genreService.GetAsync();
 			return Ok(response);

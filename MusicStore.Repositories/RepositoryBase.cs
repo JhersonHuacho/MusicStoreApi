@@ -17,7 +17,7 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where T
 		return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
 	}
 
-	public async Task<TEntity?> GetAsync(int id)
+	public virtual async Task<TEntity?> GetAsync(int id)
 	{
 		return await _context.Set<TEntity>().FindAsync(id);
 		//return await _context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
@@ -37,14 +37,14 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where T
 			.ToListAsync();
 	}
 
-	public async Task<int> AddAsync(TEntity entity)
+	public virtual async Task<int> AddAsync(TEntity entity)
 	{
 		await _context.Set<TEntity>().AddAsync(entity);
 		await _context.SaveChangesAsync();
 		
 		return entity.Id;
 	}
-	public async Task UpdateAsync()
+	public virtual async Task UpdateAsync()
 	{
 		await _context.SaveChangesAsync();
 	}

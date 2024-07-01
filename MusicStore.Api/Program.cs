@@ -23,14 +23,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Registering services
 builder.Services.AddTransient<IGenreRespository,GenreRespository>();
 builder.Services.AddTransient<IConcertRepository,ConcertRepository>();
+builder.Services.AddTransient<ISaleRepository, SaleRepository>();
+builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
 
 builder.Services.AddTransient<IConcertService, ConcertService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
+builder.Services.AddTransient<ISaleService, SaleService>();
 
 builder.Services.AddAutoMapper(config => 
 {
     config.AddProfile<ConcertProfile>();
     config.AddProfile<GenreProfile>();
+	config.AddProfile<SaleProfile>();
 });
 
 var app = builder.Build();
