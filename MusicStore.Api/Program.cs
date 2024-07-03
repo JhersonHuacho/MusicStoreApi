@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MusicStore.Persistence;
 using MusicStore.Repositories;
 using MusicStore.Services.Implementation;
 using MusicStore.Services.Interfaces;
 using MusicStore.Services.Profiles;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +35,37 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// Configure Identity
+builder.Services.AddAuthentication(x => 
+{
+	x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x => 
+{
+	var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT:JWTKey"]
+		?? throw new InvalidOperationException("JWT Key not configured"));
+
+	x.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuer = false,
+		ValidateAudience = false,
+		ValidateLifetime = true,
+		ValidateIssuerSigningKey = true,
+		IssuerSigningKey = new SymmetricSecurityKey(key)
+	};
+});
+builder.Services.AddAuthorization();
+builder.Services.AddIdentity<MusicStoreUserIdentity, IdentityRole>(policies => 
+	{
+		policies.Password.RequireDigit = false;
+		policies.Password.RequireLowercase = false;
+		policies.Password.RequireUppercase = false;		
+		policies.Password.RequiredLength = 6;
+		policies.User.RequireUniqueEmail = true;
+	})
+	.AddEntityFrameworkStores<ApplicationDbContext>()
+	.AddDefaultTokenProviders();
 
 // AddHttpContextAccessor for HttpContext injection nos permite inyectar el HttpContext en cualquier parte de la aplicación
 builder.Services.AddHttpContextAccessor();
@@ -63,8 +98,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Scope for Auto-Migrations
+using (var scope = app.Services.CreateScope())
+{
+	// Auto-Migrations 
+	// Automatically apply any pending migrations
+	var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	await applicationDbContext.Database.MigrateAsync();
+
+	// Seed Data
+	await UserDataSeeder.Seed(scope.ServiceProvider);
+};
 
 app.Run();

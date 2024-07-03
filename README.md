@@ -68,3 +68,16 @@ using System;
 ````
 
 ### Autenticación y Autorización
+
+Identity es una herramienta de Microsoft que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+Vamos a instalar Identity en nuestro proyecto de .NET Core.
+Para instalar Identity en nuestro proyecto de .NET Core, 
+primero debemos agregar el paquete Microsoft.AspNetCore.Identity.EntityFrameworkCore a nuestro proyecto.
+Y luego el paquete Microsoft.AspNetCore.Authentication.JwtBear a nuestro proyecto.
+Microsoft.AspNetCore.Authentication.JwtBear es un paquete que se utiliza para implementar la autenticación basada en tokens JWT en aplicaciones web y móviles.
+
+
+### Migraciones automáticas y seed data
+Seed Data es un conjunto de datos que se utiliza para inicializar una base de datos con datos de prueba.
+
+### Register y Login (uso de options pattern)

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MusicStore.Dto.Request;
-using MusicStore.Dto.Response;
-using MusicStore.Entities;
 using MusicStore.Services.Interfaces;
-using System.Net;
 
 namespace MusicStore.Api.Controllers
 {
 	[ApiController]
 	[Route("api/genres")]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class GenresController : ControllerBase
 	{
 		private readonly IGenreService _genreService;
@@ -21,6 +21,8 @@ namespace MusicStore.Api.Controllers
 		}
 
 		[HttpGet]
+		[AllowAnonymous]
+		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		//public async Task<ActionResult<List<Genre>> Get()
 		public async Task<IActionResult> Get(PaginationDto paginationDto)
 		{
