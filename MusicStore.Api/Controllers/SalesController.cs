@@ -15,6 +15,30 @@ public class SalesController : ControllerBase
 		_saleService = saleService;
 	}
 
+	[HttpGet("ListSalesByDate")]
+	public async Task<IActionResult> GetByDate([FromQuery] SaleByDateSearchDto saleByDateSearchDto,
+		[FromQuery] PaginationDto paginationDto)
+	{
+		var response = await _saleService.GetAsync(saleByDateSearchDto, paginationDto);
+		if (response.Success)
+		{
+			return Ok(response);
+		}
+		return BadRequest(response);
+	}
+
+	[HttpGet("ListSales")]
+	public async Task<IActionResult> Get(string email, [FromQuery] string? title,
+		[FromQuery] PaginationDto paginationDto)
+	{
+		var response = await _saleService.GetAsync(email, title, paginationDto);
+		if (response.Success)
+		{
+			return Ok(response);
+		}
+		return BadRequest(response);
+	}
+
 	[HttpGet("{id:int}")]
 	public async Task<IActionResult> Get(int id)
 	{

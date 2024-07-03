@@ -2,7 +2,7 @@
 
 public class PaginationDto
 {
-	private readonly int _maxRecordsPerPage = 50;
+	private readonly int _maxRecordsPerPage = 5;
 	public int Page { get; set; } = 1;
 	
 	private int recordsPerPage;

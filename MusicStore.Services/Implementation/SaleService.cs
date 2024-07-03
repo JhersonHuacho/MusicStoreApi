@@ -104,4 +104,56 @@ public class SaleService : ISaleService
 
 		return response;
 	}
+
+	public async Task<BaseResponseGeneric<ICollection<SaleResponseDto>>> GetAsync(
+		SaleByDateSearchDto saleByDateSearchDto, 
+		PaginationDto paginationDto)
+	{
+		var response = new BaseResponseGeneric<ICollection<SaleResponseDto>>();
+		try
+		{
+			var dateInit = Convert.ToDateTime(saleByDateSearchDto.DateStart);
+			var dateEnd = Convert.ToDateTime(saleByDateSearchDto.DateEnd);
+
+			var data = await _saleRepository.GetAsync(
+					predicate: x => x.SaleDate >= dateInit && x.SaleDate <= dateEnd,
+					orderBy: x => x.OperationNumber,
+					paginationDto
+				);
+			
+			response.Data = _mapper.Map<ICollection<SaleResponseDto>>(data);
+			response.Success = true;
+		}
+		catch (Exception ex)
+		{
+			response.ErrorMessage = "Error al obtener las ventas";
+			_logger.LogError(ex, $"{response.ErrorMessage} {ex.Message}");			
+		}
+
+		return response;
+	}
+
+	public async Task<BaseResponseGeneric<ICollection<SaleResponseDto>>> GetAsync(string email, string title, 
+		PaginationDto paginationDto)
+	{
+		var response = new BaseResponseGeneric<ICollection<SaleResponseDto>>();
+		try
+		{
+			var data = await _saleRepository.GetAsync(
+					predicate: s => s.Customer.Email == email && s.Concert.Title.Contains(title ?? string.Empty),
+					orderBy: x => x.OperationNumber,
+					paginationDto
+				);
+
+			response.Data = _mapper.Map<ICollection<SaleResponseDto>>(data);
+			response.Success = true;
+		}
+		catch (Exception ex)
+		{
+			response.ErrorMessage = "Error al obtener las ventas";
+			_logger.LogError(ex, $"{response.ErrorMessage} {ex.Message}");
+		}
+
+		return response;
+	}
 }

@@ -5,7 +5,7 @@ namespace MusicStore.Services.Interfaces
 {
 	public interface IConcertService
 	{
-		Task<BaseResponseGeneric<ICollection<ConcertResponseDto>>> GetAsync(string? title);
+		Task<BaseResponseGeneric<ICollection<ConcertResponseDto>>> GetAsync(string? title, PaginationDto paginationDto);
 		Task<BaseResponseGeneric<ConcertResponseDto>> GetAsync(int id);
 		Task<BaseResponseGeneric<int>> AddAsync(ConcertRequestDto concert);
 		Task<BaseResponse> UpdateAsync(int id, ConcertRequestDto concertRequestDto);

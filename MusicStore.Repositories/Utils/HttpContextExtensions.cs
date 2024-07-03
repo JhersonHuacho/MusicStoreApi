@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace MusicStore.Repositories.Utils;
 
@@ -12,7 +13,7 @@ public static class HttpContextExtensions
 			throw new ArgumentNullException(nameof(httpContext));
 		}
 
-		double totalRecords = query.Count();
+		double totalRecords = await query.CountAsync();
 		httpContext.Response.Headers.Add("TotalRecordsQuantity", totalRecords.ToString());
 	}
 }

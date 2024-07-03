@@ -7,6 +7,18 @@ using MusicStore.Services.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//  Configure CORS
+var corsConfiguration = "MusicStoreCors";//builder.Configuration.GetSection("Cors").Get<string[]>();
+builder.Services.AddCors(setupAction =>
+{
+	setupAction.AddPolicy(corsConfiguration, policy =>
+	{
+		policy.AllowAnyOrigin();
+		policy.AllowAnyHeader().WithExposedHeaders(new string[] { "TotalRecordsQuantity" });
+		policy.AllowAnyMethod();
+	});
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -19,6 +31,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// AddHttpContextAccessor for HttpContext injection nos permite inyectar el HttpContext en cualquier parte de la aplicación
+builder.Services.AddHttpContextAccessor();
 
 // Registering services
 builder.Services.AddTransient<IGenreRespository,GenreRespository>();
