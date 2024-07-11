@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MusicStore.Entities;
 using MusicStore.Persistence;
 using MusicStore.Repositories;
 using MusicStore.Services.Implementation;
@@ -10,6 +11,9 @@ using MusicStore.Services.Profiles;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Options pattern registration
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("JWT"));
 
 //  Configure CORS
 var corsConfiguration = "MusicStoreCors";//builder.Configuration.GetSection("Cors").Get<string[]>();
@@ -79,6 +83,7 @@ builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
 builder.Services.AddTransient<IConcertService, ConcertService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddTransient<ISaleService, SaleService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddAutoMapper(config => 
 {
