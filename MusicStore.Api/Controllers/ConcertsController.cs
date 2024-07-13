@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MusicStore.Dto.Request;
+using MusicStore.Entities;
 using MusicStore.Services.Interfaces;
 
 namespace MusicStore.Api.Controllers;
 
 [ApiController]
 [Route("api/concerts")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.RoleAdmin)]
 public class ConcertsController : ControllerBase
 {
 	private readonly IConcertService _concertService;
@@ -25,6 +29,7 @@ public class ConcertsController : ControllerBase
 	}
 
 	[HttpGet("title")]
+	[AllowAnonymous]
 	public async Task<IActionResult> Get(string? title, [FromQuery] PaginationDto paginationDto)
 	{
 		var response = await _concertService.GetAsync(title, paginationDto);
@@ -46,6 +51,7 @@ public class ConcertsController : ControllerBase
 	}
 
 	[HttpGet("{id:int}")]
+	[AllowAnonymous]
 	public async Task<IActionResult> Get(int id)
 	{
 		var response = await _concertService.GetAsync(id);

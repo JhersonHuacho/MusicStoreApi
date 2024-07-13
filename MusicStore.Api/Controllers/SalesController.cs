@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MusicStore.Dto.Request;
 using MusicStore.Services.Interfaces;
+using System.Security.Claims;
 
 namespace MusicStore.Api.Controllers;
 
@@ -51,9 +54,11 @@ public class SalesController : ControllerBase
 	}
 
 	[HttpPost]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public async Task<IActionResult> Post([FromBody] SaleRequestDto saleRequestDto)
-	{		
-		var response = await _saleService.AddAsync(saleRequestDto.Email, saleRequestDto);
+	{
+		var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email).Value;
+		var response = await _saleService.AddAsync(email, saleRequestDto);
 		if (response.Success)
 		{
 			return Ok(response);

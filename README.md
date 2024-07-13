@@ -81,3 +81,9 @@ Microsoft.AspNetCore.Authentication.JwtBear es un paquete que se utiliza para im
 Seed Data es un conjunto de datos que se utiliza para inicializar una base de datos con datos de prueba.
 
 ### Register y Login (uso de options pattern)
+
+
+### Reset y change password feature
+
+### Refactorizando Sales (con el uso de los claims)
+

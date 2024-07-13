@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Dto.Request;
+using MusicStore.Entities;
 using MusicStore.Services.Interfaces;
 
 namespace MusicStore.Api.Controllers
 {
 	[ApiController]
-	[Route("api/genres")]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	[Route("api/genres")]	
 	public class GenresController : ControllerBase
 	{
 		private readonly IGenreService _genreService;
@@ -21,7 +21,6 @@ namespace MusicStore.Api.Controllers
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
 		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		//public async Task<ActionResult<List<Genre>> Get()
 		public async Task<IActionResult> Get(PaginationDto paginationDto)
@@ -38,6 +37,7 @@ namespace MusicStore.Api.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.RoleAdmin)]
 		public async Task<IActionResult> Post([FromBody] GenreRequestDto genreRequestDto)
 		{
 			var response = await _genreService.AddAsync(genreRequestDto);
@@ -45,6 +45,7 @@ namespace MusicStore.Api.Controllers
 		}
 
 		[HttpPut("{id:int}")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.RoleAdmin)]
 		public async Task<IActionResult> Put(int id, [FromBody] GenreRequestDto genreRequestDto)
 		{
 			var response = await _genreService.UpdateAsync(id, genreRequestDto);
@@ -52,6 +53,7 @@ namespace MusicStore.Api.Controllers
 		}
 
 		[HttpDelete("{id:int}")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.RoleAdmin)]
 		public  async Task<IActionResult> Delete(int id)
 		{
 			var response = await _genreService.DeleteAsync(id);

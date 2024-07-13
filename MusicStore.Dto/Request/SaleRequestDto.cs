@@ -12,6 +12,4 @@ namespace MusicStore.Dto.Request;
 // se recomienda usar reord para DTO
 public record SaleRequestDto(
 	int ConcertId,
-	short TicketsQuantity,
-	string Email,
-	string FullName);
+	short TicketsQuantity);

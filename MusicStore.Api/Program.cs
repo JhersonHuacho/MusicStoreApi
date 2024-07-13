@@ -84,6 +84,7 @@ builder.Services.AddTransient<IConcertService, ConcertService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddTransient<ISaleService, SaleService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddAutoMapper(config => 
 {

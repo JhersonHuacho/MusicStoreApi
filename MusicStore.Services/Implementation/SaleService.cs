@@ -38,13 +38,14 @@ public class SaleService : ISaleService
 			var customer = await _customerRepository.GetByEmailAsync(email);
 			if (customer == null)
 			{
+				throw new InvalidOperationException($"El cliente con email {email} no existe.");
 				// Caso de uso: Si el cliente no existe, se crea
-				customer = new Customer
-				{
-					Email = email,
-					FullName = saleRequestDto.FullName
-				};
-				customer.Id = await _customerRepository.AddAsync(customer);
+				//customer = new Customer
+				//{
+				//	Email = saleRequestDto.Email,
+				//	FullName = saleRequestDto.FullName
+				//};
+				//customer.Id = await _customerRepository.AddAsync(customer);
 			}
 
 			entity.CustomerId = customer.Id;

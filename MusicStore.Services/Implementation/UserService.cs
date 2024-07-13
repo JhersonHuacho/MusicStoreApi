@@ -9,6 +9,7 @@ using MusicStore.Persistence;
 using MusicStore.Repositories;
 using MusicStore.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security;
 using System.Security.Claims;
 using System.Text;
 
@@ -21,18 +22,22 @@ public class UserService : IUserService
 	private readonly ILogger<UserService> _logger;
 	private readonly ICustomerRepository _customerRepository;
 	private readonly IOptions<AppSettings> _appSettings;
+	private readonly IEmailService _emailService;
+
 	public UserService(
 		UserManager<MusicStoreUserIdentity> userManager, 
 		SignInManager<MusicStoreUserIdentity> signInManager, 
 		ILogger<UserService> logger, 
 		ICustomerRepository customerRepository, 
-		IOptions<AppSettings> appSettings)
+		IOptions<AppSettings> appSettings,
+		IEmailService emailService)
 	{
 		_userManager = userManager;
 		_signInManager = signInManager;
 		_logger = logger;
 		_customerRepository = customerRepository;
 		_appSettings = appSettings;
+		_emailService = emailService;
 	}
 	public async Task<BaseResponseGeneric<RegisterResponseDto>> RegisterAsync(RegisterRequestDto registerRequestDto)
 	{
@@ -160,4 +165,125 @@ public class UserService : IUserService
 			ExpirationDate = expiracion
 		};
 	}
+
+	public async Task<BaseResponse> RequestTokenToResetPasswordAsync(ResetPasswordRequestDto resetPasswordRequestDto)
+	{
+		var response = new BaseResponse();
+		
+		try
+		{
+			var userIdentity = await _userManager.FindByEmailAsync(resetPasswordRequestDto.Email);
+			if (userIdentity is null)
+			{
+				throw new SecurityException("Usuario no existe");
+			}
+
+			var token = await _userManager.GeneratePasswordResetTokenAsync(userIdentity);
+
+			// Enviar un email con el token para resetear la contraseña
+			await _emailService.SendEmailAsync(resetPasswordRequestDto.Email, "Reestablecer clave", 
+				@$"
+					<p> Estimado {userIdentity.FirstName} {userIdentity.LastName}: </p>
+					<p> Para reestablecer su clave, por favor copie el siguiente código</p>
+					<p> <strong>{token}</strong> </p>
+					<hr/>
+					Atte. <br/>
+					Music Store @ 2024
+				"	
+			);
+
+			response.Success = true;
+		}
+		catch (Exception ex)
+		{
+			response.ErrorMessage = "Ocurrió un error al solicitar el token para reestablecer la contraseña.";
+			_logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+		}
+
+		return response;
+	}
+
+	public async Task<BaseResponse> ResetPasswordAsync(NewPasswordRequestDto requestDto)
+	{
+		var response = new BaseResponse();
+
+		try
+		{
+			var userIdentity = await _userManager.FindByEmailAsync(requestDto.Email);
+			if (userIdentity is null)
+			{
+				throw new SecurityException("Usuario no existe");
+			}
+
+			var result = await _userManager.ResetPasswordAsync(userIdentity, requestDto.Token, requestDto.ConfirmNewPassword);
+			response.Success = result.Succeeded;
+
+			if (!result.Succeeded)
+			{
+				response.ErrorMessage = String.Join(" ", result.Errors.Select(x => x.Description).ToArray());				
+			}
+			else
+			{
+				// Enviar un email de confirmación de clave cambiada
+				await _emailService.SendEmailAsync(requestDto.Email, "Confirmación de cambio de clave",
+					@$"
+						<p> Estimado {userIdentity.FirstName} {userIdentity.LastName}: </p>
+						<p> Se ha reestablecido su clave correctamente. </p>
+						<hr/>
+						Atte. <br/>
+						Music Store @ 2024
+					");
+			}
+		}
+		catch (Exception ex)
+		{
+			response.ErrorMessage = "Ocurrió un error al resetear la clave";
+			_logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+		}
+
+		return response;
+	}
+
+	public async Task<BaseResponse> ChangePasswordAsync(string email, ChangePasswordRequestDto requestDto)
+	{
+		var response = new BaseResponse();
+
+		try
+		{
+			var userIdentity = await _userManager.FindByEmailAsync(email);
+			if (userIdentity is null)
+			{
+				throw new SecurityException("Usuario no existe");
+			}
+
+			var result = await _userManager.ChangePasswordAsync(userIdentity, requestDto.OldPassword, requestDto.NewPassword);
+			response.Success = result.Succeeded;
+
+			if (!result.Succeeded)
+			{
+				response.ErrorMessage = String.Join(" ", result.Errors.Select(x => x.Description).ToArray());
+			}
+			else
+			{
+				_logger.LogInformation("Se cambió la clave correctamente para {email}", userIdentity.Email);
+
+				// Enviar un email de confirmación de clave cambiada
+				await _emailService.SendEmailAsync(email, "Confirmación de cambio de clave",
+					@$"
+						<p> Estimado {userIdentity.FirstName} {userIdentity.LastName}: </p>
+						<p> Se ha cambiado su clave correctamente. </p>
+						<hr/>
+						Atte. <br/>
+						Music Store @ 2024
+					");
+			}
+		}
+		catch (Exception ex)
+		{
+			response.ErrorMessage = "Error al cambiar la clave";
+			_logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+		}
+
+		return response;
+	}		
 }
