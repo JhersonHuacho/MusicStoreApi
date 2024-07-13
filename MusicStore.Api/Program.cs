@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using MusicStore.Api.Endpoints;
+using MusicStore.Api.Filters;
 using MusicStore.Entities;
 using MusicStore.Persistence;
 using MusicStore.Repositories;
@@ -33,7 +34,11 @@ builder.Services.AddCors(setupAction =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => 
+{
+	options.Filters.Add(typeof(FilterExceptions));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
