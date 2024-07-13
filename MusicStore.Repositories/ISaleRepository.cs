@@ -1,5 +1,6 @@
 ﻿using MusicStore.Dto.Request;
 using MusicStore.Entities;
+using MusicStore.Entities.Info;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace MusicStore.Repositories
 			Expression<Func<Sale, bool>> predicate, 
 			Expression<Func<Sale, TKey>> orderBy, 
 			PaginationDto paginationDto);
+
+		Task<ICollection<ReportInfo>> GetSaleReportAsync(DateTime dateStart, DateTime dateEnd);
 	}
 }

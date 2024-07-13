@@ -21,6 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<MusicStoreUserIdentity>
 
 		// HasNoKey es un método que se usa para indicar que la entidad no tiene una clave primaria			
 		modelBuilder.Entity<ConcertInfo>().HasNoKey();
+		modelBuilder.Entity<ReportInfo>().HasNoKey();
 
 		//modelBuilder.Entity<Genre>().Property(x => x.Name).HasMaxLength(50);
 		modelBuilder.Entity<MusicStoreUserIdentity>(x => x.ToTable("User"));

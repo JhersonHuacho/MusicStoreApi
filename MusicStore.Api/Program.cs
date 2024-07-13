@@ -1,7 +1,11 @@
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+using MusicStore.Api.Endpoints;
 using MusicStore.Entities;
 using MusicStore.Persistence;
 using MusicStore.Repositories;
@@ -89,6 +93,11 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 //builder.Services.AddTransient<IFileStorage, FileStorageAzure>();
 builder.Services.AddTransient<IFileStorage, FileStorageLocal>();
 
+// Registering healthchecks
+builder.Services.AddHealthChecks()
+	.AddCheck("selfcheck", () => HealthCheckResult.Healthy())
+	.AddDbContextCheck<ApplicationDbContext>();
+
 builder.Services.AddAutoMapper(config => 
 {
     config.AddProfile<ConcertProfile>();
@@ -111,6 +120,11 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseCors(corsConfiguration);
+
+app.MapReportEndpoints();
+app.MapHomeEndpoints();
+
 app.MapControllers();
 
 // Scope for Auto-Migrations
@@ -124,5 +138,11 @@ using (var scope = app.Services.CreateScope())
 	// Seed Data
 	await UserDataSeeder.Seed(scope.ServiceProvider);
 };
+
+// Configuring health checks
+app.UseHealthChecks("/healthcheck", new HealthCheckOptions()
+{
+	ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();

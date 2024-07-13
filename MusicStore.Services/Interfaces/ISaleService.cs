@@ -9,4 +9,5 @@ public interface ISaleService
 	Task<BaseResponseGeneric<SaleResponseDto>> GetAsync(int id);		
 	Task<BaseResponseGeneric<ICollection<SaleResponseDto>>> GetAsync(SaleByDateSearchDto saleByDateSearchDto, PaginationDto paginationDto);
 	Task<BaseResponseGeneric<ICollection<SaleResponseDto>>> GetAsync(string email, string title, PaginationDto paginationDto);
+	Task<BaseResponseGeneric<ICollection<SaleReportResponseDto>>> GetSaleReportAsync(DateTime dateStart, DateTime dateEnd);
 }
