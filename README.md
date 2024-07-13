@@ -87,3 +87,9 @@ Seed Data es un conjunto de datos que se utiliza para inicializar una base de da
 
 ### Refactorizando Sales (con el uso de los claims)
 
+### Probando con swagger y postmam
+
+### Trabajando con archivos y validaciones personalizadas
+
+### Guardar archivos en la nube con Azure Storage y en local
+

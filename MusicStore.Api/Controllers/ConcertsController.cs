@@ -59,14 +59,14 @@ public class ConcertsController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Post(ConcertRequestDto concertRequestDto)
+	public async Task<IActionResult> Post([FromForm] ConcertRequestDto concertRequestDto)
 	{
 		var response = await _concertService.AddAsync(concertRequestDto);
 		return response.Success ? Ok(response) : BadRequest(response);
 	}
 
 	[HttpPut("{id:int}")]
-	public async Task<IActionResult> Put(int id, ConcertRequestDto concertRequestDto)
+	public async Task<IActionResult> Put(int id, [FromForm] ConcertRequestDto concertRequestDto)
 	{
 		var response = await _concertService.UpdateAsync(id, concertRequestDto);
 		return response.Success ? Ok(response) : BadRequest(response);
