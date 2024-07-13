@@ -97,3 +97,6 @@ Azure Storage es un servicio de almacenamiento en la nube de Microsoft
 que se utiliza para almacenar datos de forma segura y escalable.
 
 ### Minimal APIs, Healthcheck y Excepciones globales
+
+### Preparando proyecto para subir a producción y UnitTest
+me quede aquí
