@@ -86,6 +86,9 @@ builder.Services.AddTransient<ISaleService, SaleService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 
+//builder.Services.AddTransient<IFileStorage, FileStorageAzure>();
+builder.Services.AddTransient<IFileStorage, FileStorageLocal>();
+
 builder.Services.AddAutoMapper(config => 
 {
     config.AddProfile<ConcertProfile>();

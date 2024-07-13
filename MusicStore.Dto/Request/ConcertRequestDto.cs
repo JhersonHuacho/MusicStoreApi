@@ -14,7 +14,7 @@ namespace MusicStore.Dto.Request
 		public string TimeEvent { get; set; } = default!;
 		[FileSizeValidation(maxSizeInMegabytes: 1)]
 		[FileTypeValidation(FileTypeGroup.Image)]
-		public IFormFile? ImageUrl { get; set; }
+		public IFormFile? Image { get; set; }
 		public int TicketsQuantity { get; set; }
 	}
 }

@@ -93,3 +93,6 @@ Seed Data es un conjunto de datos que se utiliza para inicializar una base de da
 
 ### Guardar archivos en la nube con Azure Storage y en local
 
+Azure Storage es un servicio de almacenamiento en la nube de Microsoft 
+que se utiliza para almacenar datos de forma segura y escalable.
+

@@ -13,12 +13,15 @@ public class ConcertService : IConcertService
 	private readonly IConcertRepository _concertRepository;
 	private readonly ILogger<ConcertService> _logger;
 	private readonly IMapper _mapper;
+	private readonly IFileStorage _fileStorage;
+	private readonly string containerName = "concerts";
 
-	public ConcertService(IConcertRepository concertRepository, ILogger<ConcertService> logger, IMapper mapper)
+	public ConcertService(IConcertRepository concertRepository, ILogger<ConcertService> logger, IMapper mapper, IFileStorage fileStorage)
     {
-	_concertRepository = concertRepository;
-	_logger = logger;
-	_mapper = mapper;
+		_concertRepository = concertRepository;
+		_logger = logger;
+		_mapper = mapper;
+		_fileStorage = fileStorage;
 	}
     public async Task<BaseResponseGeneric<ICollection<ConcertResponseDto>>> GetAsync(
 		string? title, PaginationDto paginationDto)
@@ -63,18 +66,33 @@ public class ConcertService : IConcertService
 		return response;
 	}
 
-	public async Task<BaseResponseGeneric<int>> AddAsync(ConcertRequestDto concert)
+	public async Task<BaseResponseGeneric<int>> AddAsync(ConcertRequestDto concertRequestDto)
 	{
 		var response = new BaseResponseGeneric<int>();
+		Concert entity = new();
+
 		try
 		{
-			var concertEntity = _mapper.Map<Concert>(concert);
-			var data = await _concertRepository.AddAsync(concertEntity);
-			response.Data = data;
+			entity = _mapper.Map<Concert>(concertRequestDto);
+			if (concertRequestDto.Image is not null)
+			{
+				using (var memoryStream = new MemoryStream())
+				{
+					await concertRequestDto.Image.CopyToAsync(memoryStream);
+
+					var content = memoryStream.ToArray();
+					var extension = Path.GetExtension(concertRequestDto.Image.FileName);
+
+					entity.ImageUrl = await _fileStorage.SaveFile(content, extension, containerName, concertRequestDto.Image.ContentType);
+				}
+			}
+						
+			response.Data = await _concertRepository.AddAsync(entity);
 			response.Success = true;
 		}
 		catch (Exception ex)
 		{
+			await _fileStorage.DeleteFile(entity.ImageUrl ?? string.Empty, containerName);
 			response.ErrorMessage = "Ocurrió un error al obtener la información";
 			_logger.LogError(ex, $"{response.ErrorMessage} {ex.Message}");
 		}
@@ -95,6 +113,22 @@ public class ConcertService : IConcertService
 			}
 			
 			_mapper.Map(concertRequestDto, data);
+
+			if (concertRequestDto.Image is not null)
+			{
+				using (var memoryStream = new MemoryStream())
+				{
+					await concertRequestDto.Image.CopyToAsync(memoryStream);
+					var content = memoryStream.ToArray();
+					var extension = Path.GetExtension(concertRequestDto.Image.FileName);
+					data.ImageUrl = await _fileStorage.EditFile(content, extension, containerName, data.ImageUrl ?? string.Empty, concertRequestDto.Image.ContentType);
+				}
+			}
+			else
+			{
+				data.ImageUrl = string.Empty;
+			}
+
 			await _concertRepository.UpdateAsync();
 			
 			response.Success = true;
