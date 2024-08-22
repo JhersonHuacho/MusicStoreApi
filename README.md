@@ -1,17 +1,13 @@
-### Migración
+## Api .Net 6.0
 
+### Autenticación y Autorización
 Páginación
-
 CORS
-
 Delegados
 
-
 Identity Server 4 (https://identityserver.io/) es una herramienta de código abierto que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles. 
-Identity Server 4 es una implementación de OpenID Connect y OAuth 2.0, que son protocolos de autenticación y autorización estándar en la industria. 
-Identity Server 4 proporciona una solución centralizada para la autenticación y la autorización, lo que facilita la implementación de la seguridad en las aplicaciones. 
-Identity Server 4 es una herramienta muy flexible y extensible que se puede personalizar para adaptarse a las necesidades específicas de cada aplicación. 
-Identity Server 4 es una excelente alternativa a Identity para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+    * es una implementación de OpenID Connect y OAuth 2.0, que son protocolos de autenticación y autorización estándar en la industria. 
+    * proporciona una solución centralizada para la autenticación y la autorización, lo que facilita la implementación de la seguridad en las aplicaciones. 
 
 Qué otras herramientas para autenticación y autorización existe aparte de Identity Server?
 Auth0 => Auth0 es una plataforma de identidad en la nube que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
@@ -27,12 +23,9 @@ Gluu
 Shibboleth
 SimpleSAMLphp
 
-Identity y Identity Server 4 son dos herramientas diferentes para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+Diferencias entre Identity y Identity Server 4
 Identity es una herramienta de Microsoft que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
 Identity Server 4 es una herramienta de código abierto que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
-
-Diferencias entre Identity y Identity Server 4
-Identity es una herramienta de Microsoft, mientras que Identity Server 4 es una herramienta de código abierto.
 
 ### Paginación parte II
 
@@ -99,4 +92,6 @@ que se utiliza para almacenar datos de forma segura y escalable.
 ### Minimal APIs, Healthcheck y Excepciones globales
 
 ### Preparando proyecto para subir a producción y UnitTest
-me quede aquí
+
+### Subiendo proyecto a la nube de Azure: AppService, SQL Server, SQL Database
+App Service es un servicio de Azure que se utiliza para implementar aplicaciones web y móviles en la nube.
