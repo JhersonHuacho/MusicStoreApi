@@ -6,7 +6,11 @@ using MusicStore.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 // Options pattern registration
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("JWT"));
+//builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("JWT"));
+// Mapeamos el archivo appsettings{environment}.json en una clase de tipo AppSettings
+// builder.Configuration es una instancia de IConfiguration que contiene todos los valores de configuración de la aplicación.
+// Estos valores pueden provenir de varios orígenes, como archivos JSON (por ejemplo, appsettings.json), variables de entorno, argumentos de línea de comandos, etc.
+builder.Services.Configure<AppSettings>(builder.Configuration);
 //  Configure CORS
 var corsConfiguration = "MusicStoreCors";//builder.Configuration.GetSection("Cors").Get<string[]>();
 builder.Services.AddCorsPolicy(corsConfiguration);
