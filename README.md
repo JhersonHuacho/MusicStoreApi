@@ -1,4 +1,4 @@
-## Api .Net 6.0
+## Api .Net 8.0
 
 ### Autenticación y Autorización
 Páginación
@@ -10,20 +10,17 @@ Identity Server 4 (https://identityserver.io/) es una herramienta de código abie
     * proporciona una solución centralizada para la autenticación y la autorización, lo que facilita la implementación de la seguridad en las aplicaciones. 
 
 Qué otras herramientas para autenticación y autorización existe aparte de Identity Server?
-Auth0 => Auth0 es una plataforma de identidad en la nube que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
-Okta => Okta es una plataforma de identidad en la nube que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
-Keycloak es una herramienta de código abierto que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
-AWS Cognito es un servicio de autenticación y autorización de AWS que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
-Firebase Authentication es un servicio de autenticación de Firebase que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
-OAuth.io es una plataforma de autenticación y autorización que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
-Stormpath
-Ping Identity
-ForgeRock
-Gluu
-Shibboleth
-SimpleSAMLphp
+
+* Auth0 => Auth0 es una plataforma de identidad en la nube que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+* Okta => Okta es una plataforma de identidad en la nube que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+* Keycloak es una herramienta de código abierto que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+* AWS Cognito es un servicio de autenticación y autorización de AWS que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+* Firebase Authentication es un servicio de autenticación de Firebase que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+* OAuth.io es una plataforma de autenticación y autorización que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
+* Stormpath, Ping Identity, ForgeRock, Gluu, Shibboleth, SimpleSAMLphp
 
 Diferencias entre Identity y Identity Server 4
+
 Identity es una herramienta de Microsoft que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
 Identity Server 4 es una herramienta de código abierto que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
 
@@ -39,9 +36,10 @@ CORS es un mecanismo de seguridad que protege a los usuarios de sitios web malic
 
 Un delegado es un tipo de referencia que se utiliza para almacenar una referencia a un método.
 En c# hay varios tipos de delegados:
-Action: representa un método que no devuelve un valor.
-Func: representa un método que devuelve un valor.
-Predicate: representa un método que devuelve un valor booleano.
+
+* Action: representa un método que no devuelve un valor.
+* Func: representa un método que devuelve un valor.
+* Predicate: representa un método que devuelve un valor booleano.
 
 Delegados en C# son similares a los punteros a funciones en C y C++, pero son más seguros y fáciles de usar.
 Ejemplo de delegado en C#:
@@ -51,8 +49,9 @@ using System;
 ````
 
 Result Pattern es un patrón de diseño que se utiliza para representar el resultado de una operación que puede tener éxito o fallar.
-Result Pattern es una forma de manejar los errores de una manera más segura y eficiente que las excepciones.
-Result Pattern es una alternativa a las excepciones que se utiliza en algunos lenguajes de programación, como Rust y F#.
+Es una forma de manejar los errores de una manera más segura y eficiente que las excepciones.
+Es una alternativa a las excepciones que se utiliza en algunos lenguajes de programación, como Rust y F#.
+
 Ejemplo de Result Pattern en C#:
 ```csharp
 using System;
@@ -64,6 +63,7 @@ using System;
 
 Identity es una herramienta de Microsoft que se utiliza para gestionar la autenticación y la autorización en aplicaciones web y móviles.
 Vamos a instalar Identity en nuestro proyecto de .NET Core.
+
 Para instalar Identity en nuestro proyecto de .NET Core, 
 primero debemos agregar el paquete Microsoft.AspNetCore.Identity.EntityFrameworkCore a nuestro proyecto.
 Y luego el paquete Microsoft.AspNetCore.Authentication.JwtBear a nuestro proyecto.
