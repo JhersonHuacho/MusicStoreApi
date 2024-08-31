@@ -16,5 +16,6 @@ namespace MusicStore.Dto.Request
 		[FileTypeValidation(FileTypeGroup.Image)]
 		public IFormFile? Image { get; set; }
 		public int TicketsQuantity { get; set; }
+		public bool Status { get; set; } = true;
 	}
 }

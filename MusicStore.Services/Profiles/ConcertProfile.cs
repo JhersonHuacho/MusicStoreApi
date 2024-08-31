@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MusicStore.Dto.Request;
 using MusicStore.Dto.Response;
 using MusicStore.Entities;
 using MusicStore.Entities.Info;
@@ -19,6 +20,10 @@ namespace MusicStore.Services.Profiles
                 .ForMember(dest => dest.DateEvent, opt => opt.MapFrom(src => Convert.ToDateTime($"{src.DateEvent} {src.TimeEvent}")))
 				.ForMember(dest => dest.ImageUrl, opt => opt.Ignore())
                 ;
+
+			CreateMap<ConcertRequestDto, Concert>()
+				.ForMember(dest => dest.DateEvent, opt => opt.MapFrom(src => Convert.ToDateTime($"{src.DateEvent} {src.TimeEvent}")))
+				.ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
         }
     }
 }

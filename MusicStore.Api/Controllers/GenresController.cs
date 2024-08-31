@@ -22,8 +22,9 @@ namespace MusicStore.Api.Controllers
 
 		[HttpGet]
 		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		//public async Task<ActionResult<List<Genre>> Get()
-		public async Task<IActionResult> Get(PaginationDto paginationDto)
+		//public async Task<IActionResult> Get(PaginationDto paginationDto)
+		//public async Task<ActionResult<List<Genre>>> GetAll()
+		public async Task<IActionResult> GetAll()
 		{
 			var response = await _genreService.GetAsync();
 			return Ok(response);
