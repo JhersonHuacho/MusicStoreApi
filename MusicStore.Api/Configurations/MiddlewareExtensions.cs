@@ -15,6 +15,8 @@ namespace MusicStore.Api.Configurations
 
 			app.UseHttpsRedirection();
 
+			app.UseStaticFiles();
+
 			app.UseAuthentication();
 
 			app.UseAuthorization();

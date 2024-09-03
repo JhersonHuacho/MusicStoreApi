@@ -31,8 +31,4 @@
     <ProjectReference Include="..\MusicStore.Services\MusicStore.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
 </Project>
