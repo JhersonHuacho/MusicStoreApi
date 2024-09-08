@@ -17,7 +17,8 @@ public class SaleProfile : Profile
 
 		CreateMap<Sale, SaleResponseDto>()
 			.ForMember(dest => dest.SaleId, opt => opt.MapFrom(x => x.Id))
-			.ForMember(dest => dest.DateEvent, opt => opt.MapFrom(x => x.Concert.DateEvent.ToString("D", culture)))
+			//.ForMember(dest => dest.DateEvent, opt => opt.MapFrom(x => x.Concert.DateEvent.ToString("D", culture)))
+			.ForMember(dest => dest.DateEvent, opt => opt.MapFrom(x => x.Concert.DateEvent.ToString("dd/MM/yyyy HH:mm", culture)))
 			.ForMember(dest => dest.TimeEvent, opt => opt.MapFrom(x => x.Concert.DateEvent.ToString("T", culture)))
 			.ForMember(dest => dest.Genre, opt => opt.MapFrom(x => x.Concert.Genre.Name))
 			.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(x => x.Concert.ImageUrl))
